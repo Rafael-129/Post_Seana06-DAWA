@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media - Posts</title>
+  <!-- Materialize CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+      font-family: 'Montserrat', Arial, sans-serif;
+      min-height: 100vh;
+    }
+    .brand-logo {
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.85);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.15);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.18);
+      transition: box-shadow 0.3s, transform 0.3s;
+      margin-bottom: 2.5rem;
+      overflow: hidden;
+    }
+    .glass-card:hover {
+      box-shadow: 0 16px 40px 0 rgba(31,38,135,0.25);
+      transform: translateY(-6px) scale(1.03);
+    }
+    .card-image img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+    }
+    .card-content {
+      padding-bottom: 0.5rem;
+    }
+    .hashtags {
+      margin: 0.7rem 0 0.3rem 0;
+    }
+    .chip {
+      background: #e0f7fa;
+      color: #00796b;
+      font-weight: 500;
+      margin-right: 0.2rem;
+      margin-bottom: 0.2rem;
+    }
+    .card-action {
+      background: transparent;
+      border-top: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.7rem 1.5rem 1rem 1.5rem;
+    }
+    .actions a, .actions form {
+      display: inline;
+    }
+    .actions button, .actions a {
+      border: none;
+      background: none;
+      color: #009688;
+      cursor: pointer;
+      font-size: 1.3em;
+      margin-left: 0.5em;
+      transition: color 0.2s;
+    }
+    .actions button:hover, .actions a:hover {
+      color: #e53935;
+    }
+    .author {
+      font-size: 1em;
+      color: #555;
+      font-weight: 500;
+    }
+    .new-post-btn {
+      margin: 2rem 0 2.5rem 0;
+      border-radius: 30px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px #0002;
+      transition: background 0.2s;
+    }
+    .new-post-btn:hover {
+      background: #26a69a;
+    }
+    .main-header {
+      background: rgba(255,255,255,0.25);
+      box-shadow: none;
+      padding: 2rem 0 1.5rem 0;
+      margin-bottom: 0;
+      text-align: center;
+    }
+    .main-header-title {
+      color: #009688;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      margin: 0;
+    }
+    .center-align {
+      text-align: center !important;
+    }
+    @media (max-width: 600px) {
+      .card-image img { height: 140px; }
+      .container { padding: 0 0.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <span class="main-header-title">Social Media</span>
+  </header>
+  <div class="container">
+    <h4 class="center-align" style="margin-top:2rem;font-weight:700;">Explora los Posts</h4>
+    <div class="center-align">
+      <a href="/posts/new" class="btn-large teal lighten-1 white-text new-post-btn">
+        <i class="material-icons left">add_circle</i>Nuevo Post
+      </a>
+    </div>
+    <div class="row" style="margin-top:2rem;">
+      <% if (posts.length === 0) { %>
+        <div class="col s12">
+          <div class="card-panel yellow lighten-4 center-align">
+            <i class="material-icons large" style="color:#ffd600;">sentiment_dissatisfied</i>
+            <h5>No hay posts publicados aún.</h5>
+            <p>¡Sé el primero en compartir algo!</p>
+          </div>
+        </div>
+      <% } %>
+      <% posts.forEach(post => { %>
+        <div class="col s12 m6 l4">
+          <div class="glass-card z-depth-1">
+            <div class="card-image">
+              <img src="<%= post.imageUrl || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80' %>" alt="Imagen del post">
+            </div>
+            <div class="card-content">
+              <span class="card-title teal-text text-darken-2" style="font-weight:600;"><%= post.title %></span>
+              <p style="margin:0.7rem 0 0.3rem 0;"><%= post.content %></p>
+              <div class="hashtags">
+                <% if (post.hashtags && post.hashtags.length) { %>
+                  <% post.hashtags.forEach(tag => { %>
+                    <span class="chip">#<%= tag %></span>
+                  <% }) %>
+                <% } else { %>
+                  <span class="chip grey lighten-2">Sin hashtags</span>
+                <% } %>
+              </div>
+            </div>
+            <div class="card-action">
+              <span class="author">
+                <i class="material-icons tiny" style="vertical-align:middle;">person</i>
+                <%= post.user ? (post.user.name + " " + post.user.lastName) : "Desconocido" %>
+              </span>
+              <span class="actions">
+                <a href="/posts/<%= post._id %>/edit" title="Editar">
+                  <i class="material-icons teal-text">edit</i>
+                </a>
+                <form action="/posts/<%= post._id %>/delete" method="POST" style="display:inline;">
+                  <button type="submit" title="Eliminar">
+                    <i class="material-icons red-text">delete</i>
+                  </button>
+                </form>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
